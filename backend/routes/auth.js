@@ -146,7 +146,6 @@ router.post(
 );
 
 // Route 3: Get logedin User Details with Post "/api/auth/getuser" -  login required
-// valid token for use Sodais Khan "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI3YWYxNTVlN2NkODY5ZjE4NDQ5MTcwIn0sImlhdCI6MTY1MjI3MDI2Nn0.ibkkejc7TKloBNEbmpp8iEr7j9RLFg3Tw5XhNaRt-uk"
 router.post("/getuser", fetchuserdata, async (req, res) => {
   // from the middleware we will get the user details in req.user
   try {
