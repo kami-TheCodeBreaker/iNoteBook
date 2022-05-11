@@ -4,10 +4,12 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const fetchuserdata = require("../middleware/fetchuserdata");
+require("dotenv").config();
 
-const JWT_SECRET = "PakistanZindabad";
-
-// checking for post request on endpoint /api/auth/createuser, to create user after validating recieved data - no login required
+// reading jwt secret from .env file
+const JWT_SECRET = process.env.REACT_JWT_SECRET;
+// Route 1: Create User after validating with Post "/api/auth/createuser" - no login required
 router.post(
   "/createuser",
   // validating recieved data
@@ -27,9 +29,9 @@ router.post(
 
   // custom validator to check if name is empty or less then 5 character
   body("name").custom((value) => {
-    if (value.trim().length === 0)
+    if (value?.trim().length === 0)
       return Promise.reject("Name should not be Empty");
-    else if (value.trim().length < 5)
+    else if (value?.trim().length < 5)
       return Promise.reject("Name should be atleast 5 character long");
     else return Promise.resolve();
   }),
@@ -62,7 +64,7 @@ router.post(
           id: user.id,
         },
       };
-      const authtoken = jwt.sign(user.id, JWT_SECRET);
+      const authtoken = jwt.sign(data, JWT_SECRET);
       res.json({ authtoken });
     } catch (error) {
       // if something went wrong so seting status code and sending error messages as json resoponse
@@ -75,12 +77,13 @@ router.post(
   }
 );
 
+// Route 2: Login User after authintication "/api/auth/login" - no login required
 router.post(
   "/login",
   // custom validator to check if name is empty or less then 5 character
   // check that password is empty or not
   body("password").custom((value) => {
-    if (value.trim().length === 0)
+    if (value?.trim().length === 0)
       return Promise.reject("password should not be Empty");
     else return Promise.resolve();
   }),
@@ -126,7 +129,6 @@ router.post(
           id: user.id,
         },
       };
-
       // signing data with secret
       const authtoken = jwt.sign(data, JWT_SECRET);
 
@@ -143,4 +145,19 @@ router.post(
   }
 );
 
+// Route 3: Get logedin User Details with Post "/api/auth/getuser" -  login required
+// valid token for use Sodais Khan "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI3YWYxNTVlN2NkODY5ZjE4NDQ5MTcwIn0sImlhdCI6MTY1MjI3MDI2Nn0.ibkkejc7TKloBNEbmpp8iEr7j9RLFg3Tw5XhNaRt-uk"
+router.post("/getuser", fetchuserdata, async (req, res) => {
+  // from the middleware we will get the user details in req.user
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+    res.json({
+      "user-id": userId,
+      user: user,
+    });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+});
 module.exports = router;
