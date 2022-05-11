@@ -4,7 +4,7 @@ const express = require("express");
 connectToMongo();
 
 const app = express();
-const port = 3000;
+const port = 5000;
 
 // required this middleware to Parse json bodies for this app.
 app.use(express.json());

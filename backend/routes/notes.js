@@ -98,6 +98,7 @@ router.put(
 
       // If id is valid ObjectId then Find note and update it
       const note = await Note.findById(id);
+      if(!note) return res.status(404).json({ error: "Note Not found " }); // If id is not valid ObjectId then send error as json response
 
       //Now check whether user is updating his own notes
       if (req.user.id != note.user.toString())
@@ -120,4 +121,44 @@ router.put(
     }
   }
 );
+
+// Route 4: Delete Note from database with Delete"/api/notes/deletenote/:id" -  login required
+router.delete(
+  "/deletenote/:id",
+  fetchuserdata,
+  async (req, res) => {
+    try {
+      // Get id from request params
+      const id = req.params.id;
+      // Now check if id is valid ObjectId or not otherwise it will throw error
+      if (!mongoose.Types.ObjectId.isValid(id))
+        return res.status(404).json({ error: "Note Not found" }); // If id is not valid ObjectId then send error as json response
+
+      // If id is valid ObjectId then Find note and update it
+      let note = await Note.findById(id);
+      
+      if(!note) return res.status(404).json({ error: "Note Not found" }); // If note is not found send error as json response
+
+      //Now check whether user is updating his own notes
+      if (req.user.id != note.user.toString())
+        // if user try to update notes of others then send an error as json response
+        return res.status(401).json({ error: "Not valid" });
+
+      // If user is updating his own notes then update it
+      note=await Note.findByIdAndDelete(req.params.id);
+
+      res.json({
+        msg: "Note deleted Successfully",
+        note: note,
+      });
+    } catch (error) {
+      // if something went wrong so seting status code and sending error messages as json resoponse
+      res.status(500);
+      res.json({
+        msg: error.message, // contain error message
+      });
+    }
+  }
+);
+
 module.exports = router;
