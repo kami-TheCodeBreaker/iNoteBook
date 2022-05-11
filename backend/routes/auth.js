@@ -12,38 +12,39 @@ const JWT_SECRET = process.env.REACT_JWT_SECRET;
 // Route 1: Create User after validating with Post "/api/auth/createuser" - no login required
 router.post(
   "/createuser",
-  // validating recieved data
-  // password must be 5 character long
-  body("password")
-    .isLength({ min: 5 })
-    .withMessage("Password should be atleast 5 character long"),
-  body("email").isEmail().withMessage("Enter a valid Email"),
+  [
+    // validating recieved data
+    // password must be 5 character long
+    body("password")
+      .isLength({ min: 5 })
+      .withMessage("Password should be atleast 5 character long"),
+    body("email").isEmail().withMessage("Enter a valid Email"),
 
-  // custom validator to check if name contains a number or not
-  body("name")
-    .custom((value) => {
-      const hasNumber = /\d/;
-      if (!hasNumber.test(value)) return Promise.resolve();
-    })
-    .withMessage("Name should only contain strings "),
+    // custom validator to check if name contains a number or not
+    body("name")
+      .custom((value) => {
+        const hasNumber = /\d/;
+        if (!hasNumber.test(value)) return Promise.resolve();
+      })
+      .withMessage("Name should only contain strings "),
 
-  // custom validator to check if name is empty or less then 5 character
-  body("name").custom((value) => {
-    if (value?.trim().length === 0)
-      return Promise.reject("Name should not be Empty");
-    else if (value?.trim().length < 5)
-      return Promise.reject("Name should be atleast 5 character long");
-    else return Promise.resolve();
-  }),
+    // custom validator to check if name is empty or less then 5 character
+    body("name").custom((value) => {
+      if (value?.trim().length === 0)
+        return Promise.reject("Name should not be Empty");
+      else if (value?.trim().length < 5)
+        return Promise.reject("Name should be atleast 5 character long");
+      else return Promise.resolve();
+    }),
 
-  // custom validator to check if a user with the same email already exist or not
-  body("email").custom(async (value) => {
-    const res = await User.find({ email: value });
-    if (res.length > 0) {
-      return Promise.reject("E-mail already exist");
-    }
-  }),
-
+    // custom validator to check if a user with the same email already exist or not
+    body("email").custom(async (value) => {
+      const res = await User.find({ email: value });
+      if (res.length > 0) {
+        return Promise.reject("E-mail already exist");
+      }
+    }),
+  ],
   async (req, res) => {
     // check for errors, if presenet then send as json
     const errors = validationResult(req);
@@ -70,7 +71,6 @@ router.post(
       // if something went wrong so seting status code and sending error messages as json resoponse
       res.status(500);
       res.json({
-        error: "Somthing went wrong",
         msg: error.message, // contain error message
       });
     }
@@ -80,22 +80,23 @@ router.post(
 // Route 2: Login User after authintication "/api/auth/login" - no login required
 router.post(
   "/login",
-  // custom validator to check if name is empty or less then 5 character
-  // check that password is empty or not
-  body("password").custom((value) => {
-    if (value?.trim().length === 0)
-      return Promise.reject("password should not be Empty");
-    else return Promise.resolve();
-  }),
-  // check that email is empty or not
-  body("email").custom((value) => {
-    if (value.trim().length === 0)
-      return Promise.reject("email should not be Empty");
-    else return Promise.resolve();
-  }),
-  // check whether its valid email or not
-  body("email").isEmail().withMessage("Enter a valid Email"),
-
+  [
+    // custom validator to check if name is empty or less then 5 character
+    // check that password is empty or not
+    body("password").custom((value) => {
+      if (value?.trim().length === 0)
+        return Promise.reject("password should not be Empty");
+      else return Promise.resolve();
+    }),
+    // check that email is empty or not
+    body("email").custom((value) => {
+      if (value.trim().length === 0)
+        return Promise.reject("email should not be Empty");
+      else return Promise.resolve();
+    }),
+    // check whether its valid email or not
+    body("email").isEmail().withMessage("Enter a valid Email"),
+  ],
   async (req, res) => {
     // check for errors, if presenet then send as json
     const errors = validationResult(req);
@@ -138,7 +139,6 @@ router.post(
       // if something went wrong so seting status code and sending error messages as json resoponse
       res.status(500);
       res.json({
-        error: "Somthing went wrong",
         msg: error.message, // contain error messages
       });
     }
