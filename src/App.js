@@ -5,12 +5,15 @@ import Home from "./components/Home";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import NoteState from "./Context/Note/NoteState";
+import { ToastContainer } from 'react-toastify';
+
 function App() {
   return (
     <>
       <NoteState>
         <Router>
           <Navbar title="iNoteBook" />
+          <ToastContainer/>
           <Routes>
             <Route exact path="/" element={<Home />}></Route>
             <Route exact path="/about" element={<About />}></Route>

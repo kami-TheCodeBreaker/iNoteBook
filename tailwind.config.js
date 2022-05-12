@@ -6,7 +6,7 @@ module.exports = {
         'nav-link': '1.6rem',
       }
       ,spacing: {
-        'note-w': '21rem',
+        'note-w': '20rem',
       }
     },
   },

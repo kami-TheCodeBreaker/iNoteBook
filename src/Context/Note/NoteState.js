@@ -1,34 +1,8 @@
 import NoteContext from "./NoteContext";
 import { useState } from "react";
+
 const NoteState = (props) => {
   const initialNotes = [
-    {
-      _id: "627c141afa773ea4a0c5df21",
-      user: "627bfcd310f5114799817846",
-      title: "Title",
-      description: "Description",
-      tag: "Tag",
-      date: "2022-05-11T19:52:58.061Z",
-      __v: 0,
-    },
-    {
-      _id: "627d259b1de1d3d9066c7fd7",
-      user: "627bfcd310f5114799817846",
-      title: "updated2",
-      description: "updated2",
-      tag: "Tag",
-      date: "2022-05-12T15:19:55.357Z",
-      __v: 0,
-    },
-    {
-      _id: "627d259e1de1d3d9066c7fda",
-      user: "627bfcd310f5114799817846",
-      title: "updated1",
-      description: "updated1",
-      tag: "Tag",
-      date: "2022-05-12T15:19:58.891Z",
-      __v: 0,
-    },
     {
       _id: "627d25a31de1d3d9066c7fdd",
       user: "627bfcd310f5114799817846",
@@ -57,12 +31,39 @@ const NoteState = (props) => {
       __v: 0,
     },
   ];
-
   const [notes, setNotes] = useState(initialNotes);
 
-  <NoteContext.Provider value={{ notes, setNotes }}>
-    {props.children}
-  </NoteContext.Provider>;
-};
+  // Add a Note
+  const addNote = (title, description, tags) => {
+    // Todo Api call
+    if (!tags) tags = "General"; // check if no tag then assign a tag
+    const note = {
+      _id: "627bfcd310f5114799817846sda",
+      user: "627bfcd310f5114799817846",
+      title: title,
+      description: description,
+      tag: tags,
+      date: "2022-05-11T19:52:58.061Z",
+      __v: 0,
+    };
+    setNotes(notes.concat(note));
+  };
+  // Delete a Note
+  const deleteNote = (id) => {
+    // Todo Api call
+    const newNotes = notes.filter((note) => note._id !== id); // filter all notes where _id is not equal to params (id)
+    setNotes(newNotes);
+  };
 
+  // Update a Note
+  const updateNote = (id) => {
+    // Todo Api call
+  };
+
+  return (
+    <NoteContext.Provider value={{ notes, setNotes, addNote, deleteNote,updateNote }}>
+      {props.children}
+    </NoteContext.Provider>
+  );
+};
 export default NoteState;
