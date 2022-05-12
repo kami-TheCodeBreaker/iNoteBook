@@ -1,9 +1,9 @@
-import React from 'react'
-
+import React from "react";
+import Note from "./Note";
 function Home() {
   return (
-    <div className='my-52'>Home component</div>
-  )
+    <Note/>
+  );
 }
 
-export default Home
+export default Home;

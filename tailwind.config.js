@@ -5,6 +5,9 @@ module.exports = {
       fontSize: {
         'nav-link': '1.6rem',
       }
+      ,spacing: {
+        'note-w': '21rem',
+      }
     },
   },
   plugins: [],
