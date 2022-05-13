@@ -10,6 +10,10 @@ function Note() {
     getAllNotes();
     //eslint-disable-next-line
   }, []);
+  useEffect(() => {
+    getAllNotes();
+    //eslint-disable-next-line
+  }, []);
 
   return (
     <div className="mt-20 w-4/6 mx-auto ">
@@ -23,12 +27,7 @@ function Note() {
 
           <div className="notes-container  justify-center sm:justify-center  md:justify-center lg:justify-start flex gap-11 flex-wrap ">
             {notes.map((note) => {
-              return (
-                <NoteItem
-                  key={note._id}
-                 note={note}
-                />
-              );
+              return <NoteItem key={note._id} note={note} />;
             })}
           </div>
         </div>

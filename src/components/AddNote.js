@@ -8,15 +8,11 @@ import DisplayTags from "./DisplayTags";
 function AddNote() {
   const [tags, setTags] = useState([]); //initially tags are set to empty []
 
-  // By default note titlte and description if user does not enter it
-  const [note, setNote] = useState({
-    title: "title",
-    description: "description",
-  });
-
   //Using the NoteContext to add notes using addNote method available in NoteState
   const context = useContext(NoteContext);
-  const { addNote } = context;
+  
+  // By default it will be the initial note defined in the notestatte
+  const { addNote,note,setNote} = context;
 
   //handling Add Note click
   const onClicHandler = (e) => {

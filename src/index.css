@@ -14,12 +14,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-.rti--container {
-  --rti-bg: "#648" !important;
-  --rti-border: "#648"!important;
-  --rti-main: "#648"!important;
-  --rti-radius: "5648.375rem"!important;
-  --rti-s: "5.5rem"!important; /* spacing */
-  --rti-tag: "#648"!important;
-  --rti-tag-remove: "#648"!important;
-}

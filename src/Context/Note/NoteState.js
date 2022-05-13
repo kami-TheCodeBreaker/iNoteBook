@@ -3,6 +3,15 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 const NoteState = (props) => {
+  const defaultNote = {
+    id:"",
+    etitle: "default",
+    edescription: "default",
+    etag: "default",
+  };
+  const [note, setNote] = useState(defaultNote);
+  const [tags, setTags] = useState([]); //initially tags are set to empty []
+
   const [loading, setLoading] = useState(true);
   const host = "http://localhost:5000";
   const initialNotes = [];
@@ -41,23 +50,56 @@ const NoteState = (props) => {
       const json = await response.json();
       if (response.status !== 200) return toast.warning(json.error);
 
+      toast.success("Note Added Successfully");
       getAllNotes();
     } catch (error) {
-      console.log("error is",error.message)
+      console.log("error is", error.message);
     }
   };
   // Delete a Note
-  const deleteNote = (id) => {
-    // Todo Api call
-    const newNotes = notes.filter((note) => note._id !== id); // filter all notes where _id is not equal to params (id)
-    setNotes(newNotes);
+  const deleteNote = async (id) => {
+    // Api call
+    try {
+      const url = `${host}/api/notes/deletenote/${id}`;
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token":
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI3YmZjZDMxMGY1MTE0Nzk5ODE3ODQ2In0sImlhdCI6MTY1MjI5MjgxOX0.Dp63sjlzLXKqdsDrx-o-i0aBXvrkAMum4RFRXQeZMV0",
+        },
+      });
+      const json = await response.json();
+      if (response.status !== 200) return toast.warning(json.error);
+      toast.success("Note deleted Successfully ");
+      getAllNotes();
+    } catch (error) {
+      console.log("error is", error.message);
+    }
   };
 
-  // Update a Note
-  const updateNote = (id) => {
-    // Todo Api call
+  // Update  Note
+  const updateExistingNote = async (id,title, description, tags) => {
+    // Api call 
+    try {
+      const url = `${host}/api/notes/updatenote/${id}`;
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token":
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI3YmZjZDMxMGY1MTE0Nzk5ODE3ODQ2In0sImlhdCI6MTY1MjI5MjgxOX0.Dp63sjlzLXKqdsDrx-o-i0aBXvrkAMum4RFRXQeZMV0",
+        },
+        body: JSON.stringify({ title, description, tag: tags }),
+      });
+      const json = await response.json();
+      if (response.status !== 200) return toast.warning(json.error);
+      toast.success("Note Updated Successfully ");
+      getAllNotes();
+    } catch (error) {
+      console.log("error is", error.message);
+    }
   };
-
   return (
     <NoteContext.Provider
       value={{
@@ -65,9 +107,11 @@ const NoteState = (props) => {
         setNotes,
         addNote,
         deleteNote,
-        updateNote,
+        updateExistingNote,
         getAllNotes,
         loading,
+        setNote,
+        note,tags,setTags
       }}
     >
       {props.children}
