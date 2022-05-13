@@ -7,7 +7,10 @@ module.exports = {
       }
       ,spacing: {
         'note-w': '20rem',
-      }
+      },  screens: {
+        'mobile': '140px',
+        // => @media (min-width: 640px) { ... }
+      },
     },
   },
   plugins: [],

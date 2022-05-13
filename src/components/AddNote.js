@@ -88,9 +88,9 @@ function AddNote() {
         </div>
         <h1 className="text-1xl font-semibold">Press Enter to save Tag</h1>
 
-        <div className="btn">
+        <div className="btn flex justify-center md:justify-start">
           <button
-            className="bg-blue-700 py-3 px-7 rounded-md text-white text-xl"
+            className="bg-blue-700 py-3 px-7 rounded-md text-white text-xl outline-0 hover:bg-blue-900"
             onClick={onClicHandler}
             type="button"
           >

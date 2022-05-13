@@ -9,7 +9,7 @@ function DisplayTags(props) {
           className="value py-1 px-2 rounded-md text-white bg-green-600 "
           key={value}
         >
-          {value.replace(',','')}
+          {value.replaceAll(',','')}
         </div>
       );
     })}

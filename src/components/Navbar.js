@@ -45,12 +45,12 @@ const Navbar = (props) => {
         </div>
         <div className="flex 3 items-center w-fit gap-2 ">
           <input
-            className="py-1 rounded-sm outline-0"
+            className="py-1 rounded-sm outline-0 text-black"
             type="text"
             name="search"
             id="search"
           />
-          <button className="bg-blue-700 py-1 px-3 rounded-md flex items-center">
+          <button className="bg-blue-700 outline-0  py-1 px-3 rounded-md flex items-center hover:bg-blue-900">
             Search
           </button>
         </div>

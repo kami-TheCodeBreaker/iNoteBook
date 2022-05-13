@@ -1,10 +1,13 @@
 const connectToMongo = require("./db");
 const express = require("express");
+var cors = require('cors')
+
 // connecting to mongo db
 connectToMongo();
 
 const app = express();
 const port = 5000;
+app.use(cors())
 
 // required this middleware to Parse json bodies for this app.
 app.use(express.json());
