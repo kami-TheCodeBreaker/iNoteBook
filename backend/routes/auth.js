@@ -46,10 +46,11 @@ router.post(
     }),
   ],
   async (req, res) => {
+    let status=false;
     // check for errors, if presenet then send as json
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({status, errors: errors.array() });
     }
     const salt = bcrypt.genSaltSync(10);
     const secPassword = await bcrypt.hash(req.body.password, salt);
@@ -66,7 +67,8 @@ router.post(
         },
       };
       const authtoken = jwt.sign(data, JWT_SECRET);
-      res.json({ authtoken });
+      status=true;
+      res.json({status, authtoken });
     } catch (error) {
       // if something went wrong so seting status code and sending error messages as json resoponse
       res.status(500);
@@ -134,7 +136,7 @@ router.post(
       const authtoken = jwt.sign(data, JWT_SECRET);
 
       // sending token to user
-      res.json({status:true, authtoken });
+      res.json({ status: true, authtoken });
     } catch (error) {
       // if something went wrong so seting status code and sending error messages as json resoponse
       res.status(500);

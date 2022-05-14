@@ -3,15 +3,21 @@ import NoteContext from "../Context/Note/NoteContext";
 import AddNote from "./AddNote";
 import NoteItem from "./NoteItem";
 import SpinLoader from "./SpinLoader";
+import { useNavigate } from "react-router-dom";
 
 function Note() {
+  const navigate = useNavigate();
   const context = useContext(NoteContext);
-  const { notes, getAllNotes, loading } = context;
+  const { notes, getAllNotes, loading} = context;
   useEffect(() => {
-    getAllNotes();
+    if (localStorage.getItem("auth-token")) {
+      getAllNotes();
+    } else {
+      navigate("/login");
+    }
+
     //eslint-disable-next-line
   }, []);
-
   return (
     <div className="mt-20 w-4/6 mx-auto ">
       <AddNote />

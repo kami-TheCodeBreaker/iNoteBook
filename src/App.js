@@ -15,7 +15,7 @@ function App() {
       <NoteState>
         <Router>
           <Navbar title="iNoteBook" />
-          <ToastContainer autoClose={2000}/>
+          <ToastContainer autoClose={1000}/>
           <Routes>
             <Route exact path="/" element={<Home />}></Route>
             <Route exact path="/about" element={<About />}></Route>

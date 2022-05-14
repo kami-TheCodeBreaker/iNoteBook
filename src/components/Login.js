@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import loginImage from "./images/login/img.png";
-
+import loginImage from "./images/login/img.jpg";
+import { Link } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
   const [credential, setCredential] = useState({ email: "", password: "" });
@@ -27,12 +27,12 @@ function Login() {
       if (response.status !== 200) return toast.warning(json.error);
 
       if (json.status) {
-        console.log(json);
         localStorage.setItem("auth-token", json.authtoken);
         navigate("/");
+        toast.success("Login Successfully ");
       }
     } catch (error) {
-      console.log("error is", error.message);
+      toast.warning("error is", error.message);
     }
   };
 
@@ -40,9 +40,6 @@ function Login() {
     e.preventDefault();
 
     login(credential.email, credential.password);
-    console.log(
-      `email is ${credential.email} and password is ${credential.password}`
-    );
   };
   return (
     <div className="loginPage w-full py-20 ">
@@ -52,50 +49,57 @@ function Login() {
             src={loginImage}
             className=" w-full"
             style={{ height: "80vh" }}
+            alt="login "
           />
         </div>
         <div className="form w-1/2 bg-white " style={{ height: "80vh" }}>
-          <div className="form-container flex flex-col justify-center items-center mt-12 gap-10 ">
-            <div className="title text-3xl">LoveBirds</div>
-            <div className="title">
-              Welcome to Loverbirds
+          <div className="form-container flex flex-col justify-center items-center mt-12 gap-10  ">
+            <div className="title text-3xl mt-12">Login to use iNoteBook </div>
+            <div className="title text-xl mt-9">Welcome to iNoteBook</div>
+            <div className="form">
               <form
                 action=""
-                className=" rounded space-y-7"
+                className=" rounded space-y-5"
                 onSubmit={handleSubmit}
               >
-                <div className="email flex flex-col justify-start  px-5 py-5 ">
+                <div className="login-input px-5 py-5 mx-20  space-y-5 ">
                   <label className="text-xl my-3 text-black" htmlFor="email">
-                    Users name or Email
+                    Email And Password
                   </label>
                   <input
-                    className="w-full h-10 "
+                    className="w-full h-10 border-b-2 border-gray-300 outline-none px-3 py-3 rounded"
                     type="email"
                     name="email"
                     value={credential.email}
                     id="email"
                     onChange={onChangeHandler}
+                    placeholder="Enter Email"
                     required
                   />
-                </div>
-                <div className="password ">
                   <input
-                    className="w-full h-10 "
+                    className="w-full h-10 border-b-2 border-gray-300 outline-none px-3 py-3 rounded"
                     type="password"
                     name="password"
                     value={credential.password}
                     id="password"
                     onChange={onChangeHandler}
+                    placeholder="Enter Password"
                     required
                   />
-                </div>
-                <div className="login-btn">
-                  <button
-                    type="submit"
-                    className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                  >
-                    Login
-                  </button>
+                  <div className="btn flex justify-center">
+                    <button
+                      type="submit"
+                      className="inline-block  py-3 bg-blue-600 text-white font-medium  leading-tight uppercase  shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out rounded-xl px-7 text-xl "
+                    >
+                      Login
+                    </button>
+                  </div>
+                  <div className="signup-link flex justify-center">
+                    <Link className="text-gray my-3 inline-block " to="/signup">
+                      New to iNoteBook ?
+                      <span className="underline"> Create Account</span>
+                    </Link>
+                  </div>
                 </div>
               </form>
             </div>

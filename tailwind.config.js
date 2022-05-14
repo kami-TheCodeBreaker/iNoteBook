@@ -7,6 +7,9 @@ module.exports = {
   plugins: [require("tw-elements/dist/plugin")],
   theme: {
     extend: {
+      fontFamily: {
+        'custom': ['cursive'],
+      },
       fontSize: {
         "nav-link": "1.6rem",
       },

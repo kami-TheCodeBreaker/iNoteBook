@@ -19,6 +19,7 @@ const NoteState = (props) => {
   };
   const [note, setNote] = useState(defaultNote);
   const [tags, setTags] = useState([]); //initially tags are set to empty []
+  const [isExecuted, setIsExecuted] = useState(false)
 
   const [loading, setLoading] = useState(true);
   const host = "http://localhost:5000";
@@ -43,7 +44,7 @@ const NoteState = (props) => {
       setNotes(json);
       setLoading(false);
     } catch (error) {
-      console.log("error is", error.message);
+      toast.warning("error is", error.message);
     }
   };
 
@@ -70,7 +71,7 @@ const NoteState = (props) => {
       toast.success("Note Added Successfully");
       getAllNotes();
     } catch (error) {
-      console.log("error is", error.message);
+      toast.warning("error is", error.message);
     }
   };
   // Delete a Note
@@ -93,7 +94,7 @@ const NoteState = (props) => {
       toast.success("Note deleted Successfully ");
       getAllNotes();
     } catch (error) {
-      console.log("error is", error.message);
+      toast.warning("error is", error.message);
     }
   };
 
@@ -118,7 +119,7 @@ const NoteState = (props) => {
       toast.success("Note Updated Successfully ");
       getAllNotes();
     } catch (error) {
-      console.log("error is", error.message);
+      toast.warning("error is", error.message);
     }
   };
   return (
@@ -134,7 +135,7 @@ const NoteState = (props) => {
         setNote,
         note,
         tags,
-        setTags,
+        setTags,isExecuted,setIsExecuted
       }}
     >
       {props.children}
