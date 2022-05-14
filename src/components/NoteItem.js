@@ -17,8 +17,9 @@ const NoteItem = (props) => {
       etitle: currentNote.title,
       edescription: currentNote.description,
       etag: currentNote.tag,
+
     };
-    setNote(newNote); // update the state of the note 
+    setNote(newNote); // update the state of the note
     ref.current.click(); // to click on the modal show button
   };
 
@@ -26,6 +27,14 @@ const NoteItem = (props) => {
     const tagsData = tags.join(", "); // join the tags array with a comma
     updateExistingNote(note.id, note.etitle, note.edescription, tagsData);
     ref.current.click(); // to click on the modal close button
+    setNote({ etitle: "", edescription: "", etag: "" });
+    setTags([]);
+  };
+
+  const handleCloseClick = (e) => {
+    closeRef.current.click(); // to click on the modal close button
+    setNote({ etitle: "", edescription: "", etag: "" });
+    setTags([]);
   };
 
   const onChange = (e) => {
@@ -34,21 +43,20 @@ const NoteItem = (props) => {
   return (
     <>
       <div
-        className="card shadow-2xl rounded-md w-note-w px-2 py-2 my-9 font-ubuntu 	"
-        style={{ position: "relative" }}
+        className="card shadow-2xl rounded-md w-note-w px-2 py-2 my-9 font-ubuntu"
       >
         <div className="text px-2">
-          <h1 className="text-2xl font-semibold my-3 w-image">
+          <h1 className="text-2xl font-semibold my-3 overflow-hidden text-ellipsis ">
             {props.note.title}
           </h1>
-          <p className="w-image my-3 ">{props.note.description}</p>
+          <p className="w-image my-3 overflow-hidden text-ellipsis ">{props.note.description}</p>
           {/* displying Already entered tags of the user */}
-          <DisplayTags tags={props.note.tag.split(",")} /> 
-          <span className="mt-3 inline-block">
-            <span className="space-x-3">
-              {/* to show time in the formate of (2 hour ago) */}
-              Added :
-              <ReactTimeAgo date={new Date(props.note.date)} locale="en-US" /> 
+          <DisplayTags tags={props.note.tag.split(",")} />
+          <span className="space-x-1 mt-3 inline-block">
+            {/* to show time in the formate of (2 hour ago) */}
+            <span> Added : </span>
+            <span>
+              <ReactTimeAgo date={new Date(props.note.date)} locale="en-US" />
             </span>
           </span>
           <div className="icon flex gap-3 my-5">
@@ -131,20 +139,26 @@ const NoteItem = (props) => {
                     id="edescription"
                     cols="30"
                     rows="5"
-                    value={note.edescription}// to show the existing description of the user
+                    value={note.edescription} // to show the existing description of the user
                     onChange={onChange}
                   ></textarea>
                 </div>
-                {/* check for tags  */}
+                {/* check for tags */}
                 <h1 className="text-2xl font-semibold">
                   {note.etag.split(",").length > 0
                     ? "Previous Tags Are : "
                     : ""}
                 </h1>
-                    {/* Render All the tags user entered */}
+                {/* Render All the tags user entered */}
                 <DisplayTags tags={note.etag.split(",")} />
-                <TagsInput
-                  onChange={setTags} 
+                <h1 className="text-2xl font-semibold">
+                  {tags.length > 0
+                    ? "Current Tags Are : "
+                    : ""}
+                </h1>
+                <DisplayTags tags={tags} />
+              <TagsInput 
+                  onChange={setTags}
                   name="tags"
                   placeHolder="Enter Tags"
                 />
@@ -159,7 +173,8 @@ const NoteItem = (props) => {
                 type="button"
                 className="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
                 data-bs-dismiss="modal"
-                ref={closeRef} 
+                ref={closeRef}
+                onClick={handleClick}
               >
                 Close
               </button>
@@ -167,7 +182,7 @@ const NoteItem = (props) => {
               <button
                 type="button"
                 className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1"
-                onClick={handleClick}
+                onClick={handleCloseClick}
               >
                 Update Note
               </button>

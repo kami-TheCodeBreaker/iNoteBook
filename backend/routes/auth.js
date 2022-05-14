@@ -134,7 +134,7 @@ router.post(
       const authtoken = jwt.sign(data, JWT_SECRET);
 
       // sending token to user
-      res.json({ authtoken });
+      res.json({status:true, authtoken });
     } catch (error) {
       // if something went wrong so seting status code and sending error messages as json resoponse
       res.status(500);

@@ -4,10 +4,18 @@ import { toast } from "react-toastify";
 
 const NoteState = (props) => {
   const defaultNote = {
-    id:"",
-    etitle: "default",
-    edescription: "default",
-    etag: "default",
+    id: "",
+    etitle: "",
+    edescription: "",
+    etag: "",
+  };
+  const checkToken = () => {
+    const authToken = localStorage.getItem("auth-token");
+    if (!authToken) {
+      toast.warning("Login required");
+      return false;
+    }
+    return authToken;
   };
   const [note, setNote] = useState(defaultNote);
   const [tags, setTags] = useState([]); //initially tags are set to empty []
@@ -16,24 +24,34 @@ const NoteState = (props) => {
   const host = "http://localhost:5000";
   const initialNotes = [];
   const [notes, setNotes] = useState(initialNotes);
+
+  // fetch all notes
   const getAllNotes = async () => {
-    const url = `${host}/api/notes/fetchallnotes`;
-    const response = await fetch(url, {
-      method: "Get",
-      credentials: "same-origin", // include, *same-origin, omit
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI3YmZjZDMxMGY1MTE0Nzk5ODE3ODQ2In0sImlhdCI6MTY1MjI5MjgxOX0.Dp63sjlzLXKqdsDrx-o-i0aBXvrkAMum4RFRXQeZMV0",
-      },
-    });
-    const json = await response.json();
-    setNotes(json);
-    setLoading(false);
+    const authToken = checkToken(); // check for auth-tokeen
+    if (!authToken) return;
+    try {
+      const url = `${host}/api/notes/fetchallnotes`;
+      const response = await fetch(url, {
+        method: "Get",
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": authToken,
+        },
+      });
+      const json = await response.json();
+      setNotes(json);
+      setLoading(false);
+    } catch (error) {
+      console.log("error is", error.message);
+    }
   };
 
   // Add a Note
   const addNote = async (title, description, tags) => {
+    // to check whether user is registered or not
+    const authToken = checkToken();
+    if (!authToken) return;
     if (!tags) tags = "General"; // check if no tag then assign a tag
     // Api call
     try {
@@ -42,8 +60,7 @@ const NoteState = (props) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI3YmZjZDMxMGY1MTE0Nzk5ODE3ODQ2In0sImlhdCI6MTY1MjI5MjgxOX0.Dp63sjlzLXKqdsDrx-o-i0aBXvrkAMum4RFRXQeZMV0",
+          "auth-token": authToken,
         },
         body: JSON.stringify({ title, description, tag: tags }),
       });
@@ -60,13 +77,15 @@ const NoteState = (props) => {
   const deleteNote = async (id) => {
     // Api call
     try {
+      const authToken = checkToken(); // check for auth-tokeen
+      if (!authToken) return;
+
       const url = `${host}/api/notes/deletenote/${id}`;
       const response = await fetch(url, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI3YmZjZDMxMGY1MTE0Nzk5ODE3ODQ2In0sImlhdCI6MTY1MjI5MjgxOX0.Dp63sjlzLXKqdsDrx-o-i0aBXvrkAMum4RFRXQeZMV0",
+          "auth-token": authToken,
         },
       });
       const json = await response.json();
@@ -79,16 +98,18 @@ const NoteState = (props) => {
   };
 
   // Update  Note
-  const updateExistingNote = async (id,title, description, tags) => {
-    // Api call 
+  const updateExistingNote = async (id, title, description, tags) => {
+    // Api call
     try {
+      const authToken = checkToken(); // check for auth-tokeen
+      if (!authToken) return;
+
       const url = `${host}/api/notes/updatenote/${id}`;
       const response = await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "auth-token":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI3YmZjZDMxMGY1MTE0Nzk5ODE3ODQ2In0sImlhdCI6MTY1MjI5MjgxOX0.Dp63sjlzLXKqdsDrx-o-i0aBXvrkAMum4RFRXQeZMV0",
+          "auth-token": authToken,
         },
         body: JSON.stringify({ title, description, tag: tags }),
       });
@@ -111,7 +132,9 @@ const NoteState = (props) => {
         getAllNotes,
         loading,
         setNote,
-        note,tags,setTags
+        note,
+        tags,
+        setTags,
       }}
     >
       {props.children}

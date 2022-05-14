@@ -10,15 +10,17 @@ function AddNote() {
 
   //Using the NoteContext to add notes using addNote method available in NoteState
   const context = useContext(NoteContext);
-  
+
   // By default it will be the initial note defined in the notestatte
-  const { addNote,note,setNote} = context;
+  const { addNote, note, setNote } = context;
 
   //handling Add Note click
   const onClicHandler = (e) => {
     e.preventDefault();
     const tagsData = tags.join(", "); // create a string from tags array and joined with (comma ,)
-    addNote(note.title, note.description, tagsData);
+    addNote(note.etitle, note.edescription, tagsData);
+    setNote({ etitle: "", edescription: "", etag: "" });
+    setTags([]);
   };
 
   //handling change when occur in title or in description
@@ -47,9 +49,11 @@ function AddNote() {
           <input
             className="w-full h-12 border-2 border-gray-500 rounded-md px-3 py-3"
             type="text"
-            name="title"
-            id="title"
+            name="etitle"
+            id="etitle"
+            value={note.etitle}
             onChange={onChangeHandler}
+            required
           />
         </div>
         <div className="">
@@ -58,15 +62,16 @@ function AddNote() {
           </label>
           <textarea
             className="w-full border-2 border-gray-500 rounded-md px-3 py-3"
-            name="description"
-            id="desc"
+            name="edescription"
+            id="edescription"
             cols="30"
             rows="5"
+            value={note.edescription}
             onChange={onChangeHandler}
+            required
           ></textarea>
         </div>
         <h1 className="text-2xl font-semibold">
-
           {/* Render All the tags user entered */}
           {tags.length > 0 ? "Entered Tags Are : " : ""}
         </h1>
@@ -79,6 +84,7 @@ function AddNote() {
             name="tags"
             onExisting={tagExist}
             onRemoved={tagRemoved}
+        
             placeHolder="Enter Tags"
           />
         </div>
@@ -89,7 +95,12 @@ function AddNote() {
             className="bg-blue-700 py-3 px-7 rounded-md text-white text-xl outline-0 hover:bg-blue-900"
             onClick={onClicHandler}
             type="button"
-          >
+            disabled={note.etitle.length < 5 || note.edescription.length < 5}
+         style={
+            {
+              backgroundColor:`${note.etitle.length < 5 || note.edescription.length < 5 ?"gray":""}`
+            }          
+         }>
             Add Note
           </button>
         </div>

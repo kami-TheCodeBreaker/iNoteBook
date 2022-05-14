@@ -3,13 +3,10 @@ import NoteContext from "../Context/Note/NoteContext";
 import AddNote from "./AddNote";
 import NoteItem from "./NoteItem";
 import SpinLoader from "./SpinLoader";
+
 function Note() {
   const context = useContext(NoteContext);
   const { notes, getAllNotes, loading } = context;
-  useEffect(() => {
-    getAllNotes();
-    //eslint-disable-next-line
-  }, []);
   useEffect(() => {
     getAllNotes();
     //eslint-disable-next-line
