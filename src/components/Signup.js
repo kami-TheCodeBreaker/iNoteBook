@@ -114,9 +114,10 @@ function Signup() {
                     </button>
                   </div>
                   <div className="signup-link flex justify-center">
-                    <Link className="text-gray my-3 inline-block " to="/signup">
-                      New to iNoteBook ?
-                      <span className="underline"> Create Account</span>
+                    <Link className="text-gray my-3 inline-block " to="/login">
+                      <span className="underline">
+                        Already have an Account ?
+                      </span>
                     </Link>
                   </div>
                 </div>
